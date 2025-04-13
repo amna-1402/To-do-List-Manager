@@ -64,6 +64,7 @@ body {
   .highlighted {
     background-color: #ffcc00;
     font-weight: bold;
+    padding: 10px;
     color: #000;
   }
   
@@ -82,26 +83,3 @@ body {
     display: flex;
     gap: 5px;
   }
-  .task-buttons button {
-    margin-left: 10px;
-    padding: 5px 10px;
-    background-color: #ffae42; /* iPhone-like orange color */
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .task-buttons button:hover {
-    background-color: #ff8c00;
-  }
-  
-  .completed {
-    text-decoration: line-through;
-    color: gray;
-  }
-  
-  .highlighted {
-    background-color: #ffff00; /* Highlight the task */
-  }
-  
