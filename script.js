@@ -48,28 +48,11 @@ function displayTask(taskObj) {
     updateCounts();
   };
 
-  // Edit button
-  let editBtn = document.createElement("button");
-  editBtn.textContent = "Edit";
-  editBtn.onclick = () => {
-    let newText = prompt("Edit your task:", taskObj.text);
-    if (newText !== null) {
-      newText = newText.trim();
-      if (newText === "") {
-        showStatus("Invalid input. Task cannot be empty.", false);
-        return;
-      }
-      // Check if the task with new text already exists
-      if (!tasks.some(task => task.text.toLowerCase() === newText.toLowerCase() && task !== taskObj)) {
-        taskObj.text = newText;
-        span.textContent = taskObj.text;
-        showStatus("Task updated successfully!", true);
-      } else {
-        showStatus("Task with the same name already exists.", false);
-      }
-    } else {
-      showStatus("Task edit canceled.", false);
-    }
+  // Highlight button
+  let highlightBtn = document.createElement("button");
+  highlightBtn.textContent = "Highlight";
+  highlightBtn.onclick = () => {
+    span.classList.toggle("highlighted");
   };
 
   // Delete button
@@ -82,11 +65,71 @@ function displayTask(taskObj) {
     showStatus("Task deleted.", true);
   };
 
-  // Highlight button
-  let highlightBtn = document.createElement("button");
-  highlightBtn.textContent = "Highlight";
-  highlightBtn.onclick = () => {
-    span.classList.toggle("highlighted");
+  // Edit button
+  let editBtn = document.createElement("button");
+  editBtn.textContent = "Edit";
+  editBtn.onclick = () => {
+    // Create input field
+    let input = document.createElement("input");
+    input.type = "text";
+    input.value = taskObj.text;
+    input.className = "edit-input";
+
+    // Create Save and Cancel buttons
+    let saveBtn = document.createElement("button");
+    saveBtn.textContent = "Save";
+
+    let cancelBtn = document.createElement("button");
+    cancelBtn.textContent = "Cancel";
+
+    // Hide all buttons during edit
+    doneBtn.style.display = "none";
+    deleteBtn.style.display = "none";
+    highlightBtn.style.display = "none";
+    editBtn.style.display = "none";
+
+    // Save logic
+    saveBtn.onclick = () => {
+      let newText = input.value.trim();
+      if (newText === "") {
+        showStatus("Task cannot be empty.", false);
+        return;
+      }
+      if (!tasks.some(task => task.text.toLowerCase() === newText.toLowerCase() && task !== taskObj)) {
+        taskObj.text = newText;
+        span.textContent = newText;
+        li.replaceChild(span, input);
+        buttonGroup.replaceChild(editBtn, saveBtn);
+        buttonGroup.removeChild(cancelBtn);
+        showStatus("Task updated successfully!", true);
+      } else {
+        showStatus("Task with the same name already exists.", false);
+      }
+
+      // Show original buttons again
+      doneBtn.style.display = "";
+      deleteBtn.style.display = "";
+      highlightBtn.style.display = "";
+      editBtn.style.display = "";
+    };
+
+    // Cancel logic
+    cancelBtn.onclick = () => {
+      li.replaceChild(span, input);
+      buttonGroup.replaceChild(editBtn, saveBtn);
+      buttonGroup.removeChild(cancelBtn);
+
+      doneBtn.style.display = "";
+      deleteBtn.style.display = "";
+      highlightBtn.style.display = "";
+      editBtn.style.display = "";
+
+      showStatus("Edit cancelled.", false);
+    };
+
+    li.replaceChild(input, span);
+    buttonGroup.replaceChild(saveBtn, editBtn);
+    buttonGroup.appendChild(cancelBtn);
   };
 
   buttonGroup.append(doneBtn, editBtn, deleteBtn, highlightBtn);
